@@ -1,5 +1,7 @@
 import requests, time
 from create_pwd import CreatePasswd
+from ShowProgress import TimeCount
+
 
 class Guest_Wifi:
 
@@ -11,12 +13,14 @@ class Guest_Wifi:
             self.new_pw()
             self.data['run'] = '1'
             self.data['action'] = 'bssidonoff'
+
             requests.post(self.set_url, data=self.data, headers=self.headers, cookies=self.cookies)
-            print('Turned on {},ends in {} minutes \n'.format(self.data['ssid'],self.time/60))
+
+            print('Turned on {},ends in {} minutes \n'.format(self.data['ssid'],int(self.countdown.total_secs/60)))
 
             self.status = True
 
-            time.sleep(self.time)
+            self.countdown.left_mins_count()
 
         elif self.status:
             print('Trying to turn off wifi 1')
@@ -53,9 +57,9 @@ class Guest_Wifi:
             self.data = kwargs['datas']
 
         if 'time' not in kwargs:
-            self.time = 600
+            self.countdown = TimeCount(10,2)
         else:
-            self.time = kwargs['time'] * 60
+            self.countdown = TimeCount(kwargs['time'], 2)
 
         self.status = False
         self.pw = CreatePasswd()

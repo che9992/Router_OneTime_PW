@@ -35,8 +35,3 @@ class CreatePasswd:
         self.hard = self.make_hard_pw()
         if len(self.new) < 8:
             self.new = self.make_hard_pw()
-
-
-
-c = CreatePasswd()
-print(c.hard)

@@ -47,7 +47,13 @@ class Login:
 
         print('Trying to log in to DDNS...')
         session = requests.post(login_url,login_info,headers)
-        self.session = session
+        if session.status_code == 200:
+            self.session = session
+        else:
+            print('Failed to log in to DDNS, Make sure your auth information')
+            print("Log in Information\n -- ID : '{}' \n -- PW : '{}'".format(login_info['username'],login_info['passwd']))
+            exit()
+
         if 'nsetCookie' in str(session.content):
             print('Log in successfully')
             session = str(session.content)
@@ -57,9 +63,8 @@ class Login:
                 self.cookie = cookie
                 print("Created..\n --self.cookie : {} \n --self.session\n".format(
                     self.cookie,self.session))
-
-        elif 'session_timeout' in str(session.content):
-            print('Failed to log in to DDNS, Make sure your auth information')
-            print("Log in Information\n -- ID : '{}' \n -- PW : '{}'".format(login_info['username'],login_info['passwd']))
+            else:
+                print("Can't find cookie in content")
+                exit()
         else:
             print('An unknown error occurred while logging into DDNS')
