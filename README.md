@@ -18,11 +18,29 @@ Thanks.
 
 --version 20180425
   fixed more easily
-  -control.py 
+  control.py 
   can change 'SSID' , 'Password'
   add defulat 'time' for sleep(10mins) , default 'SSID'
   
-  -check_DDNS.py
-   add default 'remote_port'(80)
+  check_DDNS.py
+  add default 'remote_port'(80)
+  
+  ShowProgress.py
+  count until wi-fi turn off 
+
+
+
+# datas examply for control.py
+
+data = {'tmenu': '',
+        'smenu': '',
+        'wlmode': '',
+        'action': '',
+        'sidx': '',
+        'uiidx': '',
+        'run': '',
+        'ssid': '',    
+        'wpapsk':''
+        }
    
   
