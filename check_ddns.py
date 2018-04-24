@@ -12,23 +12,33 @@ class Check:
         payload = {'username': username, 'passwd': password }
         self.login_info = payload
         print("Created..\n --self.login_info : {} \n".format(self.login_info))
-    def __init__(self, url, remote_port):
 
-        print('Starting DDNS status check...')
+    def __init__(self, **kwargs):
 
-        try:
-            check_session = requests.get('http://' + url + ':{}'.format(remote_port))
-            if check_session.status_code == 200:
-                print('Router DDNS is opened.')
-                self.basic_url = url
-                self.remote_port = remote_port
-                self.headers = self.get_headers(check_session)
-                print("Created..\n --self.basic_url : {} \n --self.remote_port : {} \n --self.headers : {}\n".format(self.basic_url,self.remote_port,self.headers))
-                check_session.close()
+        if 'url' in kwargs:
+            print('Starting DDNS status check...')
+            if not 'port' in kwargs:
+                self.remote_port = '80'
+                print('set default port = 80')
+            else:
+                self.remote_port = kwargs['port']
 
-        except:
-            print("Couldn't connet to Router DDNS, Make sure your router is turned on")
-            print("Connection Information\n -- DDNS : '{}' \n -- Remote Port : '{}'".format(url, remote_port))
+            try:
+                check_session = requests.get('http://' + kwargs['url'] + ':{}'.format(self.remote_port))
+                if check_session.status_code == 200:
+                    print('Router DDNS is opened.')
+                    self.basic_url = kwargs['url']
+                    self.headers = self.get_headers(check_session)
+                    print("Created..\n --self.basic_url : {} \n --self.remote_port : {} \n --self.headers : {}\n".format(self.basic_url,self.remote_port,self.headers))
+                    check_session.close()
+
+            except:
+                print("Couldn't connet to Router DDNS, Make sure your router is turned on")
+                print("Connection Information\n -- DDNS : '{}' \n -- Remote Port : '{}'".format(kwargs['url'], self.remote_port))
+                exit()
+        else:
+            print('You should input DDNS url ')
+            exit()
 
 class Login:
 
